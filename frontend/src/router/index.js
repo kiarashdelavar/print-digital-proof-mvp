@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import CustomerDashboard from "../pages/CustomerDashboard.vue";
 import ProofReview from "../pages/ProofReview.vue";
 import FileCheckerDashboard from "../pages/FileCheckerDashboard.vue";
@@ -27,7 +27,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 
