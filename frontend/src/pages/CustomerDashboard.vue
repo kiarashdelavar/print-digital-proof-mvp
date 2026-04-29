@@ -50,12 +50,12 @@ onMounted(async () => {
       <div class="brand">
         <img :src="printLogo" alt="Print.com logo" class="brand-logo" />
 
-        <nav class="nav-links">
-          <a href="#">Solutions</a>
-          <a href="#">Customers</a>
-          <a href="#">Catalogue</a>
-          <a href="#">We are Print.com</a>
-        </nav>
+       <nav class="nav-links">
+  <RouterLink to="/customer/dashboard">Customer dashboard</RouterLink>
+  <RouterLink to="/file-checker/dashboard">File checker</RouterLink>
+  <RouterLink to="/file-checker/upload">Upload proof</RouterLink>
+  <a href="#">Catalogue</a>
+</nav>
       </div>
 
       <div class="nav-actions">
@@ -82,10 +82,17 @@ onMounted(async () => {
           in one clear customer workflow.
         </p>
 
-        <RouterLink to="/customer/proofs/1" class="hero-button">
-          Review first proof
-          <span>↗</span>
-        </RouterLink>
+       <div class="hero-actions">
+  <RouterLink to="/customer/proofs/1" class="hero-button">
+    Review first proof
+    <span>↗</span>
+  </RouterLink>
+
+  <RouterLink to="/file-checker/dashboard" class="hero-button secondary-hero-button">
+    File checker view
+    <span>↗</span>
+  </RouterLink>
+</div>
       </div>
 
       <div class="hero-visual">
@@ -121,9 +128,14 @@ onMounted(async () => {
 
     <section class="intro-panel">
       <div class="intro-title">
-        <h2>Print management for professionals</h2>
-        <p>Your proof approval gateway for faster production decisions.</p>
-      </div>
+  <h2>Print management for professionals</h2>
+  <p>Your proof approval gateway for faster production decisions.</p>
+
+  <RouterLink to="/file-checker/upload" class="upload-shortcut">
+    Upload a new proof
+    <span>↗</span>
+  </RouterLink>
+</div>
 
       <div class="feature-row">
         <div class="feature-item">

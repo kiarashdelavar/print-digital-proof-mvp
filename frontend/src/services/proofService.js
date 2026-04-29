@@ -24,3 +24,8 @@ export async function requestChanges(id, comment) {
 
   return response.data;
 }
+
+export async function createProof(proofData) {
+  const response = await axios.post(`${API_BASE_URL}/proofs`, proofData);
+  return response.data;
+}
