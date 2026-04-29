@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import { createProof } from "../services/proofService";
 import printLogo from "../assets/print-logo.svg";
@@ -15,6 +15,12 @@ const form = ref({
 const createdProof = ref(null);
 const isSubmitting = ref(false);
 const errorMessage = ref("");
+
+const customerReviewUrl = computed(() => {
+  if (!createdProof.value) return "";
+
+  return `${window.location.origin}/customer/proofs/${createdProof.value.id}`;
+});
 
 async function handleSubmit() {
   errorMessage.value = "";
@@ -85,6 +91,21 @@ async function handleSubmit() {
           Create a proof request for a customer order and generate a review page
           that the customer can approve or reject.
         </p>
+
+        <div class="workflow-list">
+          <div>
+            <span>1</span>
+            <p>Create proof request</p>
+          </div>
+          <div>
+            <span>2</span>
+            <p>Generate customer email preview</p>
+          </div>
+          <div>
+            <span>3</span>
+            <p>Customer approves or requests changes</p>
+          </div>
+        </div>
       </aside>
 
       <section class="form-card">
@@ -128,16 +149,77 @@ async function handleSubmit() {
 
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
-        <div v-if="createdProof" class="success-card">
-          <p class="section-eyebrow">Proof created</p>
-          <h3>{{ createdProof.productName }}</h3>
-          <p>
-            The proof is now waiting for customer approval.
-          </p>
+        <div v-if="createdProof" class="result-grid">
+          <div class="success-card">
+            <p class="section-eyebrow">Proof created</p>
+            <h3>{{ createdProof.productName }}</h3>
+            <p>
+              The proof is now waiting for customer approval.
+            </p>
 
-          <RouterLink :to="`/customer/proofs/${createdProof.id}`" class="review-link">
-            Open customer review page
-          </RouterLink>
+            <div class="created-meta">
+              <p><strong>Order:</strong> {{ createdProof.orderId }}</p>
+              <p><strong>Customer:</strong> {{ createdProof.customerName }}</p>
+              <p><strong>Status:</strong> {{ createdProof.status }}</p>
+            </div>
+
+            <RouterLink :to="`/customer/proofs/${createdProof.id}`" class="review-link">
+              Open customer review page
+            </RouterLink>
+          </div>
+
+          <div class="email-preview">
+            <div class="email-topbar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <div class="email-content">
+              <p class="email-label">Fake email preview</p>
+              <h3>Your digital proof is ready</h3>
+
+              <div class="email-line">
+                <strong>To:</strong>
+                <span>{{ createdProof.customerEmail }}</span>
+              </div>
+
+              <div class="email-line">
+                <strong>Subject:</strong>
+                <span>Your digital proof for {{ createdProof.orderId }} is ready</span>
+              </div>
+
+              <div class="email-body">
+                <p>Hi {{ createdProof.customerName }},</p>
+
+                <p>
+                  Your digital proof for order
+                  <strong>{{ createdProof.orderId }}</strong>
+                  is ready for review.
+                </p>
+
+                <p>
+                  Product:
+                  <strong>{{ createdProof.productName }}</strong>
+                  <br />
+                  File:
+                  <strong>{{ createdProof.fileName }}</strong>
+                </p>
+
+                <p>
+                  Please review the proof and approve it or request changes.
+                </p>
+
+                <RouterLink :to="`/customer/proofs/${createdProof.id}`" class="email-button">
+                  Review digital proof
+                </RouterLink>
+
+                <p class="email-url">
+                  {{ customerReviewUrl }}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </section>
@@ -269,6 +351,38 @@ h1 {
   font-weight: 650;
 }
 
+.workflow-list {
+  margin-top: 34px;
+  display: grid;
+  gap: 14px;
+}
+
+.workflow-list div {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 470px;
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.workflow-list span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #ff0050;
+  color: white;
+  font-weight: 950;
+}
+
+.workflow-list p {
+  margin: 0;
+  font-weight: 850;
+}
+
 .form-card {
   background: white;
   border-radius: 28px;
@@ -336,8 +450,14 @@ input:focus {
   cursor: not-allowed;
 }
 
-.success-card {
+.result-grid {
   margin-top: 28px;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 18px;
+}
+
+.success-card {
   border-radius: 22px;
   background: #eaf9fc;
   border: 1px dashed #7fd3e8;
@@ -349,6 +469,14 @@ input:focus {
   font-size: 28px;
 }
 
+.created-meta {
+  margin-top: 14px;
+}
+
+.created-meta p {
+  margin: 8px 0;
+}
+
 .review-link {
   display: inline-flex;
   margin-top: 14px;
@@ -357,19 +485,104 @@ input:focus {
   text-decoration: none;
 }
 
+.email-preview {
+  border-radius: 24px;
+  background: white;
+  border: 1px solid #eee4e7;
+  overflow: hidden;
+  box-shadow: 0 20px 42px rgba(7, 23, 51, 0.08);
+}
+
+.email-topbar {
+  height: 44px;
+  background: #f4f1f1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 18px;
+}
+
+.email-topbar span {
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: #ff0050;
+}
+
+.email-topbar span:nth-child(2) {
+  background: #ffd166;
+}
+
+.email-topbar span:nth-child(3) {
+  background: #7fd3e8;
+}
+
+.email-content {
+  padding: 24px;
+}
+
+.email-label {
+  margin: 0 0 8px;
+  color: #ff0050;
+  font-weight: 950;
+}
+
+.email-content h3 {
+  margin: 0 0 18px;
+  font-size: 26px;
+}
+
+.email-line {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #26364d;
+}
+
+.email-body {
+  margin-top: 20px;
+  border-top: 1px solid #eee4e7;
+  padding-top: 18px;
+  color: #26364d;
+  line-height: 1.5;
+}
+
+.email-button {
+  display: inline-flex;
+  margin-top: 8px;
+  background: #ff0050;
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-weight: 950;
+}
+
+.email-url {
+  margin-top: 14px;
+  color: #667085;
+  font-size: 13px;
+  word-break: break-all;
+}
+
 .error {
   color: #be123c;
   font-weight: 900;
   margin-top: 18px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
   .upload-shell {
     grid-template-columns: 1fr;
   }
 
   .side-panel {
     min-height: auto;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
   }
 
   h1 {
