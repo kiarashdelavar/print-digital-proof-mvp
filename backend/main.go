@@ -52,6 +52,7 @@ func main() {
 	{
 		api.GET("/proofs", proofHandler.GetAllProofs)
 		api.GET("/proofs/:id", proofHandler.GetProofByID)
+		api.POST("/proofs", proofHandler.CreateProof)
 		api.POST("/proofs/:id/approve", proofHandler.ApproveProof)
 		api.POST("/proofs/:id/request-changes", proofHandler.RequestChanges)
 	}

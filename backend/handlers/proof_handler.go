@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"print-digital-proof-backend/models"
 	"print-digital-proof-backend/storage"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,48 @@ func NewProofHandler(store *storage.MemoryStore) *ProofHandler {
 	return &ProofHandler{
 		store: store,
 	}
+}
+
+// CreateProofBody represents the request body for creating a new proof.
+type CreateProofBody struct {
+	OrderID       string `json:"orderId"`
+	CustomerName  string `json:"customerName"`
+	CustomerEmail string `json:"customerEmail"`
+	ProductName   string `json:"productName"`
+	FileName      string `json:"fileName"`
+}
+
+// CreateProof creates a new digital proof.
+func (handler *ProofHandler) CreateProof(context *gin.Context) {
+	var body CreateProofBody
+
+	if err := context.ShouldBindJSON(&body); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request body",
+		})
+		return
+	}
+
+	if body.OrderID == "" || body.CustomerName == "" || body.CustomerEmail == "" || body.ProductName == "" || body.FileName == "" {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "All fields are required",
+		})
+		return
+	}
+
+	proof := models.Proof{
+		OrderID:       body.OrderID,
+		CustomerName:  body.CustomerName,
+		CustomerEmail: body.CustomerEmail,
+		ProductName:   body.ProductName,
+		FileName:      body.FileName,
+		FileURL:       "/uploads/" + body.FileName,
+		Comment:       "",
+	}
+
+	createdProof := handler.store.AddProof(proof)
+
+	context.JSON(http.StatusCreated, createdProof)
 }
 
 // GetAllProofs returns all proofs.
