@@ -1,38 +1,139 @@
 # Digital Proof Approval Workflow MVP
 
-This project is an MVP for an automated digital proof approval workflow inspired by a professional print platform workflow.
+This project is a small MVP for an automated digital proof approval workflow, inspired by a professional print platform workflow.
+
+The goal of the prototype is to explore how a manual email-based proof approval process can be replaced by a clearer web-based workflow.
 
 ## Goal
 
-The goal is to replace a manual email-based digital proof approval process with a clear web-based workflow.
+Digital proofs are usually images or PDF files that need explicit approval from a customer before production can continue.
+
+In the current assignment context, this process is manually handled by emailing back and forth between the customer, Print.com, and the production location.
+
+This MVP demonstrates a simple workflow where:
+
+1. A file checker creates a proof request  
+2. A customer receives a review link  
+3. The customer checks the proof in the web app  
+4. The customer approves the proof or requests changes  
+5. The file checker can see the updated proof status  
 
 ## Users
 
-- Customer
-- File checker / internal employee
+### Customer
+
+The customer can:
+
+- View proofs in a customer dashboard  
+- Open a proof review page  
+- Approve a proof  
+- Request changes with a comment  
+
+### File Checker / Internal Employee
+
+The file checker can:
+
+- View all proof requests  
+- Create a new proof request  
+- Generate a customer review link  
+- See the current status of each proof  
 
 ## MVP Features
 
-- Upload a digital proof
-- Link proof to an order
-- Show customer dashboard
-- Preview proof file
-- Approve proof
-- Request changes with a comment
-- Track proof status
+- Customer dashboard  
+- File checker dashboard  
+- Upload/create proof form  
+- Digital proof review page  
+- Fake email preview with customer review link  
+- Approve proof action  
+- Request changes with a comment  
+- Proof status tracking  
+- Print.com-inspired user interface  
 
 ## Tech Stack
 
-- Vue.js frontend
-- Go backend
-- Gin API framework
-- In-memory storage for the first MVP version
+- Vue.js frontend  
+- Vue Router  
+- Axios  
+- Go backend  
+- Gin API framework  
+- In-memory storage (MVP only)  
+- GitHub Pages (frontend deployment)  
 
-## Planned Workflow
+## Demo Flow
 
-1. File checker uploads a proof.
-2. The proof is linked to an order.
-3. Customer sees the proof in their dashboard.
-4. Customer opens the proof review page.
-5. Customer approves or requests changes.
-6. File checker sees the updated status.
+1. Open the file checker dashboard  
+2. Create a new proof request  
+3. View the generated fake email preview  
+4. Open the customer review link  
+5. Approve the proof or request changes  
+6. Return to the file checker dashboard to see the updated status  
+
+## How to Run Locally
+
+### Backend
+
+```bash
+cd backend
+go run main.go
+```
+
+Backend runs on:
+`   http://localhost:8080   `
+
+### Frontend
+
+`   cd frontend npm install npm run dev   `
+
+Frontend runs on:
+`   http://localhost:5173   `
+
+Main Pages
+----------
+
+Customer dashboard:
+`   /customer/dashboard   `
+
+File checker dashboard:
+`   /file-checker/dashboard   `
+
+Upload proof page:
+`   /file-checker/upload   `
+
+Proof review page:
+`   /customer/proofs/:id   `
+
+Current Limitations
+
+This is only an MVP prototype. Some parts are simplified:
+
+*   Backend uses in-memory storage
+    
+*   Data resets when backend restarts
+    
+*   No real file upload yet
+    
+*   Proof preview is a placeholder
+    
+*   No real email sending
+    
+*   No authentication or roles
+    
+*   GitHub Pages hosts only the frontend
+    
+
+Future Improvements
+
+*   Real PDF/image upload
+    
+*   Proof preview inside the review page
+    
+*   Real email notifications
+    
+*   Database integration
+    
+*   Authentication and roles
+    
+*   Proof version history
+    
+*   Audit log / activity tracking
