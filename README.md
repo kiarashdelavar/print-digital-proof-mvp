@@ -122,18 +122,3 @@ This is only an MVP prototype. Some parts are simplified:
 *   GitHub Pages hosts only the frontend
     
 
-Future Improvements
-
-*   Real PDF/image upload
-    
-*   Proof preview inside the review page
-    
-*   Real email notifications
-    
-*   Database integration
-    
-*   Authentication and roles
-    
-*   Proof version history
-    
-*   Audit log / activity tracking
