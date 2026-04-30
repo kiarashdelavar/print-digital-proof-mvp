@@ -120,5 +120,15 @@ This is only an MVP prototype. Some parts are simplified:
 *   No authentication or roles
     
 *   GitHub Pages hosts only the frontend
-    
+
+
+## Pictures
+<img width="1917" height="910" alt="image" src="https://github.com/user-attachments/assets/da115b38-c04e-44ea-80cb-d6929de3512c" />
+
+<img width="1912" height="912" alt="image" src="https://github.com/user-attachments/assets/b4da8ff7-a179-4712-872d-7ae6c7ee7146" />
+
+<img width="1575" height="775" alt="image" src="https://github.com/user-attachments/assets/c1208069-8428-443a-9ed8-177889445996" />
+
+<img width="1865" height="932" alt="image" src="https://github.com/user-attachments/assets/e222c6a5-8c6b-4b87-9a72-09f83faeabe2" />
+
 
